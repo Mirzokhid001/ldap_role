@@ -1,0 +1,15 @@
+dn: dc= {{ dc1 }},dc={{ dc2 }}
+objectClass: dcObject
+objectClass: organization
+o: {{ dc1 }}.{{ dc2 }}
+dc: {{ dc1 }}
+
+dn: ou=users,dc= {{ dc1 }},dc={{ dc2 }}
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: ou=groups,dc={{ dc1 }},dc={{ dc2 }}
+objectClass: organizationalUnit
+objectClass: top
+ou: groups

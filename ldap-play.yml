@@ -1,0 +1,9 @@
+---
+
+- name: Install openldap packages playbook
+  hosts: 192.168.1.199
+  become: yes
+
+
+  roles:
+    - ldap_role

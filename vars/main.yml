@@ -1,0 +1,15 @@
+
+temp_dir: /tmp/ldap_conf
+
+packages:
+- openldap
+- openldap-clients
+- openldap-servers
+- openssl
+- httpd
+- phpldapadmin
+
+cin_files:
+- cosine.ldif
+- nis.ldif
+- inetorgperson.ldif

@@ -1,0 +1,10 @@
+dn: olcDatabase={2}hdb,cn=config
+changeType: modify
+replace: olcSuffix
+olcSuffix: dc={{ dc1 }},dc={{ dc2 }}
+-
+replace: olcRootDN
+olcRootDN: cn={{ admin_name }},dc={{ dc1 }},dc={{ dc2 }}
+-
+add: olcRootPW
+olcRootPW: {{ gen_pass }}

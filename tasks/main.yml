@@ -1,0 +1,54 @@
+- name: Install openldap packages
+  yum:
+   name: "{{ packages }}"
+   state: latest
+
+- name: start ldap services
+  service:
+    name: slapd
+    state: started
+    enabled: yes
+
+- name: Create {{temp_dir}}
+  file:
+     path={{ temp_dir }}
+     state=directory
+
+- name: Get RootPW for openLDAP
+  shell: "slappasswd -s {{ RootPW }}"
+  register: pass_hash
+
+- name: set password as variable
+  set_fact:
+    gen_pass: "{{ pass_hash.stdout }}"
+
+- name: Copy template of hdb.ldif file to {{ temp_dir }}
+  template: src="hdb.ldif.j2" dest={{ temp_dir }}/hdb.ldif
+
+- name: implement changes into ldap config file with hdb.ldif
+  shell: ldapmodify -Y EXTERNAL  -H ldapi:/// -f {{ temp_dir }}/hdb.ldif
+
+- name: Copy monitor.ldif to {{temp_dir}}
+  template: src="monitor.ldif.j2" dest={{temp_dir}}/monitor.ldif
+
+- name: implement changes into ldap config file with monitor.ldif
+  shell: ldapmodify -Y EXTERNAL  -H ldapi:/// -f {{temp_dir}}/monitor.ldif
+  notify: Restart OpenLDAP Server
+
+- name: Copy base.ldif to {{temp_dir}}
+  template: src="base.ldif.j2" dest={{temp_dir}}/base.ldif
+
+- name: import the base structure in to the LDAP directory base.ldif
+  shell: ldapadd -x -w {{ RootPW }} -D "cn={{ admin_name }},dc={{ dc1  }},dc={{ dc2 }}" -f {{temp_dir }}/base.ldif
+
+- name: Add cosine/nis/inetoragperson ldif to ldap server
+  shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/{{cin_files}}
+
+- name: copy config.php
+  template: src="config.php.j2" dest=/etc/phpldapadmin/config.php
+
+- name: copy phpldapadmin.conf
+  template: src="phpldapadmin.conf.j2" dest=/etc/httpd/conf.d/phpldapadmin.conf
+  notify:
+    - Stop firewall
+    - Restart Apache
