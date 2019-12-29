@@ -9,7 +9,7 @@ Alias /ldapadmin /usr/share/phpldapadmin/htdocs
   <IfModule mod_authz_core.c>
     # Apache 2.4
     Require local
-      Require ip {{ ansible_eth0.ipv4.network }}/{{ ansible_eth0.ipv4.netmask }}
+      Require ip {{ ansible_ens192.ipv4.network }}/{{ ansible_ens192.ipv4.netmask }}
   </IfModule>
   <IfModule !mod_authz_core.c>
     # Apache 2.2
@@ -19,4 +19,3 @@ Alias /ldapadmin /usr/share/phpldapadmin/htdocs
     Allow from ::1
   </IfModule>
 </Directory>
-

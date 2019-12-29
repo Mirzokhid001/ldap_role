@@ -8,8 +8,3 @@ packages:
 - openssl
 - httpd
 - phpldapadmin
-
-cin_files:
-- cosine.ldif
-- nis.ldif
-- inetorgperson.ldif

@@ -42,7 +42,11 @@
   shell: ldapadd -x -w {{ RootPW }} -D "cn={{ admin_name }},dc={{ dc1  }},dc={{ dc2 }}" -f {{temp_dir }}/base.ldif
 
 - name: Add cosine/nis/inetoragperson ldif to ldap server
-  shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/{{cin_files}}
+  shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/{{ item }}
+  with_items:
+  - cosine.ldif
+  - nis.ldif
+  - inetorgperson.ldif
 
 - name: copy config.php
   template: src="config.php.j2" dest=/etc/phpldapadmin/config.php
