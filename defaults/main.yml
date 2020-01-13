@@ -1,5 +1,5 @@
-dc1: ziyotek2
-dc2: local
+dc1: example
+dc2: com
 
 admin_name: admin
 RootPW: password
